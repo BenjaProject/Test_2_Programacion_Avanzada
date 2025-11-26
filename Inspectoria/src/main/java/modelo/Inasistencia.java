@@ -74,6 +74,10 @@ public class Inasistencia {
         InasistenciaDAO i = new InasistenciaDAO();
         return i.readPorCurso(idAlumno);
     }
+    public Inasistencia obtenerInasistenciaPorId(int id) throws InstantiationException, IllegalAccessException, Exception{
+        InasistenciaDAO i = new InasistenciaDAO();
+        return i.read(idAlumno);
+    }
     
     public int crearInasistencia() throws InstantiationException, IllegalAccessException, Exception{
         InasistenciaDAO i = new InasistenciaDAO();

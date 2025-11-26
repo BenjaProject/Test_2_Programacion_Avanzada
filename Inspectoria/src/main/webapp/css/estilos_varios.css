@@ -1,0 +1,18 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 26-11-2025, 19:53:13
+    Author     : benja
+*/
+.checkbox-grande {
+    width: 20px; 
+    height: 20px; 
+    margin: 10px; 
+    
+    
+    cursor: pointer; 
+    
+}
+

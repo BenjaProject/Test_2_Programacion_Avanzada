@@ -29,6 +29,7 @@
             <div class="mb-4 text-center">
                 <button class="btn btn-info" type="button" onclick="location.href = 'ControladorAsistencia?accion=ListarCurso'">Elegir Curso</button>
                 <button class="btn btn-primary" type="button" onclick="location.href = 'ControladorAtrasos?accion=listarAtrasos&idCurso=<%= request.getAttribute("idCurso") %>'">Listar Atrasos</button>
+                <button class="btn btn-warning" type="button" onclick="location.href = 'ControladorInasistencia?accion=listarInasistencias&idCurso=<%= request.getAttribute("idCurso") %>'">Listar Inasistencias</button>
                 <button class="btn btn-success" type="button" 
                         onclick="location.href = 'ControladorAsistencia?accion=add&idCurso=<%= request.getParameter("idCurso")%>'">
                     Agregar Estudiante

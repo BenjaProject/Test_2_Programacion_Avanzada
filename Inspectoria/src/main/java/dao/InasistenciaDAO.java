@@ -65,13 +65,13 @@ public class InasistenciaDAO implements iCrud<Inasistencia, InasistenciaDTO>{
                    + "    i.id_inasistencia, "
                    + "    CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, "
                    + "    i.fecha, "
-                   + "    i.justificada, "
+                   + "    i.justificada "
                  
                    + "FROM Inasistencia i "
                    + "INNER JOIN Alumno al ON i.id_alumno = al.id "
                    + "INNER JOIN Persona p ON al.rut = p.rut "
                    + "WHERE al.id_curso = ? " 
-                   + "ORDER BY at.fecha DESC"; 
+                   + "ORDER BY i.fecha DESC"; 
                    
         conn = FactoriaServiciosImpl.getFactoria().getConexionDB().getConexion();
         stmt = conn.prepareStatement(sql);
@@ -80,7 +80,7 @@ public class InasistenciaDAO implements iCrud<Inasistencia, InasistenciaDTO>{
         
         while (rs.next()) {
             InasistenciaDTO dto = new InasistenciaDTO();
-            dto.setIdInasistencia(rs.getInt("id_atraso"));
+            dto.setIdInasistencia(rs.getInt("id_inasistencia"));
             
             // Ahora recuperamos el nombre completo concatenado
             dto.setNombreAlumno(rs.getString("nombre_completo"));

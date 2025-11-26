@@ -7,6 +7,7 @@ package controlador;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,8 +21,8 @@ import modelo.Inasistencia;
  */
 @WebServlet(name = "ControladorInasistencia", urlPatterns = {"/ControladorInasistencia"})
 public class ControladorInasistencia extends HttpServlet {
-    private final String urlListarInasistencias = "vistas/asistencia/inasistencias/readInasistencia.jsp";
-    private final String urlActualizarInasistencia = "vistas/asistencia/inasistencias/updateInasistencia.jsp";
+    private final String urlListarInasistencias = "vistas/asistencia/inasistencias/readInasistencias.jsp";
+    private final String urlActualizarInasistencia = "vistas/asistencia/inasistencias/updateInasistencias.jsp";
     
     private Inasistencia modeloInasistencia = new Inasistencia();
     int id;
@@ -68,7 +69,54 @@ public class ControladorInasistencia extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String url="";
+        String action = request.getParameter("accion");
+        try {
+            if (action.equalsIgnoreCase("listarInasistencias")) {
+                url = urlListarInasistencias;
+                String idStr = request.getParameter("idCurso");
+
+                if (idStr != null && !idStr.isEmpty() && !idStr.equals("null")) {
+                    try {
+                        int idCurso = Integer.parseInt(idStr);
+
+                        ArrayList listaAtrasos = (ArrayList) modeloInasistencia.listarInasistenciasPorCurso(idCurso);
+
+                        request.setAttribute("aRInasistencias", listaAtrasos);
+                        request.setAttribute("idCurso", idCurso);
+
+                    } catch (Exception e) {
+                        System.out.println("Error: " + e.getMessage());
+                        request.setAttribute("aRInasistencias", new ArrayList<>());
+                    }
+                } else {
+                    request.setAttribute("alertaMensaje", "Error: No se identificó el curso.");
+                    request.setAttribute("aRInasistencias", new ArrayList<>());
+                }
+            }
+            
+            if (action.equalsIgnoreCase("editarInasistencia")) {
+                url = urlActualizarInasistencia; 
+                
+                int idAtraso = Integer.parseInt(request.getParameter("idAtraso"));
+                String idCurso = request.getParameter("idCurso"); 
+                
+        
+                Inasistencia atrasoEncontrado = modeloInasistencia.obtenerInasistenciaPorId(idAtraso);
+                
+               
+                request.setAttribute("atraso", atrasoEncontrado);
+                request.setAttribute("idCurso", idCurso);
+            }
+            
+        } catch (Exception e) {
+        }
+        RequestDispatcher vista = request.getRequestDispatcher(url);
+        vista.forward(request, response);
+        
+        
+        
     }
 
     /**
@@ -82,30 +130,8 @@ public class ControladorInasistencia extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String url="";
-        String action = request.getParameter("accion");
-        if (action.equalsIgnoreCase("listarAtrasos")) {
-                url = urlListarInasistencias;
-                String idStr = request.getParameter("idCurso");
-
-                if (idStr != null && !idStr.isEmpty() && !idStr.equals("null")) {
-                    try {
-                        int idCurso = Integer.parseInt(idStr);
-
-                        ArrayList listaAtrasos = (ArrayList) modeloInasistencia.listarInasistenciasPorCurso(idCurso);
-
-                        request.setAttribute("aRAtrasos", listaAtrasos);
-                        request.setAttribute("idCurso", idCurso);
-
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e.getMessage());
-                        request.setAttribute("aRAtrasos", new ArrayList<>());
-                    }
-                } else {
-                    request.setAttribute("alertaMensaje", "Error: No se identificó el curso.");
-                    request.setAttribute("aRAtrasos", new ArrayList<>());
-                }
-            }
+        
+        
         
     }
 
