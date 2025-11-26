@@ -57,10 +57,10 @@
                 <thead class="thead-dark">
                     <tr>
                         <th class="text-center">ID INASISTENCIA</th>
-                        <th class="text-center">ESTUDIANTE</th> <th class="text-center">
+                        <th class="text-center">ESTUDIANTE</th>
                         <th class="text-center">FECHA</th>
                         <th class="text-center">Justificada</th>
-                        
+            
                         <th class="text-center">ACCIONES</th>
                     </tr>
                 </thead>
@@ -82,7 +82,7 @@
                        
 
                         <td class="text-center">
-                            <a href="ControladorAtrasos?accion=editarAtraso&idAtraso=<%= at.getIdInasistencia()%>&idCurso=<%= idCurso%>"
+                            <a href="ControladorInasistencia?accion=editarInasistencia&idAtraso=<%= at.getIdInasistencia()%>&idCurso=<%= idCurso%>"
                                class="btn btn-warning btn-sm">
                                 Editar
                             </a>

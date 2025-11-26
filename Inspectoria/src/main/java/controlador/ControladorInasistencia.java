@@ -22,7 +22,7 @@ import modelo.Inasistencia;
 @WebServlet(name = "ControladorInasistencia", urlPatterns = {"/ControladorInasistencia"})
 public class ControladorInasistencia extends HttpServlet {
     private final String urlListarInasistencias = "vistas/asistencia/inasistencias/readInasistencias.jsp";
-    private final String urlActualizarInasistencia = "vistas/asistencia/inasistencias/updateInasistencia.jsp";
+    private final String urlActualizarInasistencia = "vistas/asistencia/inasistencias/updateInasistencias.jsp";
     
     private Inasistencia modeloInasistencia = new Inasistencia();
     int id;
@@ -94,6 +94,20 @@ public class ControladorInasistencia extends HttpServlet {
                     request.setAttribute("alertaMensaje", "Error: No se identificó el curso.");
                     request.setAttribute("aRInasistencias", new ArrayList<>());
                 }
+            }
+            
+            if (action.equalsIgnoreCase("editarInasistencia")) {
+                url = urlActualizarInasistencia; 
+                
+                int idAtraso = Integer.parseInt(request.getParameter("idAtraso"));
+                String idCurso = request.getParameter("idCurso"); 
+                
+        
+                Inasistencia atrasoEncontrado = modeloInasistencia.obtenerInasistenciaPorId(idAtraso);
+                
+               
+                request.setAttribute("atraso", atrasoEncontrado);
+                request.setAttribute("idCurso", idCurso);
             }
             
         } catch (Exception e) {
