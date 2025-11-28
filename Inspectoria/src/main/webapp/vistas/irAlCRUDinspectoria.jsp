@@ -30,12 +30,6 @@
                     <p class="lead">Selecciona el módulo con el que quieres trabajar.</p>
                     <hr class="my-4">
 
-                    <a class="btn btn-info btn-lg mb-2" 
-                       href="ControladorProtocolos?accion=menu"
-                       style="margin-left:0px;">
-                        Gestión de Protocolos
-                    </a><br>
-
                     <a class="btn btn-primary btn-lg mb-2" 
                        href="<%=request.getContextPath()%>/ControladorAsistencia?accion=menu"
                        style="margin-left:0px;">
