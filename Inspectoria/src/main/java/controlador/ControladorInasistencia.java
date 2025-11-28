@@ -99,18 +99,60 @@ public class ControladorInasistencia extends HttpServlet {
             if (action.equalsIgnoreCase("editarInasistencia")) {
                 url = urlActualizarInasistencia; 
                 
-                int idAtraso = Integer.parseInt(request.getParameter("idAtraso"));
+                int idAtraso = Integer.parseInt(request.getParameter("idInasistencia"));
                 String idCurso = request.getParameter("idCurso"); 
                 
         
-                Inasistencia atrasoEncontrado = modeloInasistencia.obtenerInasistenciaPorId(idAtraso);
+                Inasistencia inasistenciaEncontrado = modeloInasistencia.obtenerInasistenciaPorId(idAtraso);
                 
                
-                request.setAttribute("atraso", atrasoEncontrado);
+                request.setAttribute("inasistencia", inasistenciaEncontrado);
                 request.setAttribute("idCurso", idCurso);
+            }
+            if (action.equalsIgnoreCase("ActualizarInasistencia")) {
+                
+              
+                int idInasistencia = Integer.parseInt(request.getParameter("txtIdInasistencia"));
+                int idAlumno = Integer.parseInt(request.getParameter("txtIdAlumno"));
+                boolean justificada;
+                
+                java.time.LocalDate fecha = java.time.LocalDate.parse(request.getParameter("txtFecha"));
+                
+                String estado = request.getParameter("chkJustificada");
+                if(estado!=null && estado.equalsIgnoreCase("true")){
+                   justificada = true;  
+                }
+                else{
+                   justificada = false;  
+                }
+                
+                
+                String idCursoStr = request.getParameter("idCurso"); 
+                
+                modeloInasistencia.setIdInasistencia (idInasistencia);
+                modeloInasistencia.setIdAlumno(idAlumno); 
+                modeloInasistencia.setFecha(fecha);
+                modeloInasistencia.setJustificada(justificada);
+               
+                
+                
+                int result = modeloInasistencia.editarInasistencia(); 
+                
+               
+                if (result == 1) {
+                    request.getSession().setAttribute("alertaMensaje", "Atraso modificado correctamente.");
+                } else {
+                    request.getSession().setAttribute("alertaMensaje", "Error: No se pudo modificar el atraso.");
+                }
+               
+                response.sendRedirect("ControladorInasistencia?accion=listarInasistencias&idCurso=" + idCursoStr);
+                return;
             }
             
         } catch (Exception e) {
+            System.out.println("ERROR CRÍTICO AL EDITAR:");
+            
+            e.printStackTrace();
         }
         RequestDispatcher vista = request.getRequestDispatcher(url);
         vista.forward(request, response);

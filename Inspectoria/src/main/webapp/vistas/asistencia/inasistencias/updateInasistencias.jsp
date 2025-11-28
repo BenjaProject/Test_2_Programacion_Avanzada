@@ -24,20 +24,20 @@
 
 
         <div class="container">
-            <h1>Modificar Atraso</h1>
+            <h1>Modificar Inasistencias</h1>
             <br>
 
-            <form action="ControladorAtrasos">
+            <form action="ControladorInasistencia">
                 <%
-                    Inasistencia a = (Inasistencia) request.getAttribute("atraso");
+                    Inasistencia a = (Inasistencia) request.getAttribute("inasistencia");
                     String idCurso = (String) request.getAttribute("idCurso");
                 %>
 
-                <input type="hidden" name="accion" value="ActualizarAtraso">
+                <input type="hidden" name="accion" value="ActualizarInasistencia">
                 <input type="hidden" name="idCurso" value="<%= idCurso%>">
 
-                ID Atraso:<br>
-                <input class="form-control" type="text" name="txtIdAtraso" value="<%= a != null ? a.getIdInasistencia() : ""%>" readonly><br>
+                ID Inasistencia:<br>
+                <input class="form-control" type="text" name="txtIdInasistencia" value="<%= a != null ? a.getIdInasistencia() : ""%>" readonly><br>
 
                 ID Alumno:<br>
                 <input class="form-control" type="text" name="txtIdAlumno" value="<%= a != null ? a.getIdAlumno() : ""%>" readonly><br>
@@ -53,7 +53,7 @@
                 <br>
 
                 <input class="btn btn-primary" type="submit" value="Actualizar"> 
-                <a href="ControladorAtrasos?accion=listarAtrasos&idCurso=<%= idCurso%>">Regresar</a>
+                <a href="ControladorInasistencia?accion=listarInasistencias&idCurso=<%= idCurso%>">Regresar</a>
             </form>
         </div>
     </body>

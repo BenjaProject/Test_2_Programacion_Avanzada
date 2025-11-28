@@ -78,11 +78,11 @@
                         <td class="text-center"><%= at.getNombreAlumno()%></td>
 
                         <td class="text-center"><%= at.getFecha()%></td>
-                        <td class="text-center"><%= at.isJustificada()%></td>
+                        <td class="text-center"><%= at.isJustificada() ? "Justificada": "Injustificada"%></td>
                        
 
                         <td class="text-center">
-                            <a href="ControladorInasistencia?accion=editarInasistencia&idAtraso=<%= at.getIdInasistencia()%>&idCurso=<%= idCurso%>"
+                            <a href="ControladorInasistencia?accion=editarInasistencia&idInasistencia=<%= at.getIdInasistencia()%>&idCurso=<%= idCurso%>"
                                class="btn btn-warning btn-sm">
                                 Editar
                             </a>

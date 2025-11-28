@@ -44,7 +44,7 @@ public class InasistenciaDAO implements iCrud<Inasistencia, InasistenciaDTO>{
     public Inasistencia read(int id) throws ClassNotFoundException, InstantiationException, IllegalAccessException, Exception {
         Inasistencia i = null;
         conn = FactoriaServiciosImpl.getFactoria().getConexionDB().getConexion();
-        String sql = "Select i.* from Inasistencia as i where id="+id;
+        String sql = "Select i.* from Inasistencia as i where i.id_inasistencia="+id;
         stmt = conn.prepareStatement(sql);
         rs = stmt.executeQuery();
         if(rs.next()){
@@ -106,7 +106,7 @@ public class InasistenciaDAO implements iCrud<Inasistencia, InasistenciaDTO>{
     @Override
     public int update(Inasistencia t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, Exception {
         conn = FactoriaServiciosImpl.getFactoria().getConexionDB().getConexion();
-        String sql = "update Inasistencia set fecha ='"+t.getFecha()+"', justificada ="+t.isJustificada();
+        String sql = "update Inasistencia set fecha ='"+t.getFecha()+"', justificada ="+t.isJustificada()+" where id_inasistencia = "+t.getIdInasistencia();
         stmt = conn.prepareStatement(sql);
         return stmt.executeUpdate();
     }
