@@ -86,23 +86,39 @@ public class ControladorAtrasos extends HttpServlet {
                 url = urlListarAtrasos;
                 String idStr = request.getParameter("idCurso");
 
-                if (idStr != null && !idStr.isEmpty() && !idStr.equals("null")) {
+                if (idStr != null && !idStr.isEmpty()) {
                     try {
                         int idCurso = Integer.parseInt(idStr);
 
-                        ArrayList listaAtrasos = (ArrayList) modeloAtraso.listarAtrasosPorCurso(idCurso);
+                        ArrayList listaAlumnos = (ArrayList) modeloAlumno.listarAlumnosPorCurso(idCurso);
+                        request.setAttribute("listaAlumnosCombo", listaAlumnos);
 
-                        request.setAttribute("aRAtrasos", listaAtrasos);
-                        request.setAttribute("idCurso", idCurso);
+                        String filtroAlumno = request.getParameter("filtroIdAlumno");
+                        String filtroFInicio = request.getParameter("filtroFechaInicio");
+                        String filtroFFin = request.getParameter("filtroFechaFin");
 
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e.getMessage());
-                        request.setAttribute("aRAtrasos", new ArrayList<>());
-                    }
-                } else {
-                    request.setAttribute("alertaMensaje", "Error: No se identificó el curso.");
-                    request.setAttribute("aRAtrasos", new ArrayList<>());
-                }
+                        ArrayList listaResultados;
+
+                        if (filtroAlumno != null || filtroFInicio != null || filtroFFin != null) {
+                            int idAlum = (filtroAlumno != null && !filtroAlumno.isEmpty()) ? Integer.parseInt(filtroAlumno) : 0;
+                            listaResultados = modeloAtraso.filtrarAtrasos(idCurso, idAlum, filtroFInicio, filtroFFin);
+
+                            request.setAttribute("filtroIdAlumno", idAlum);
+                            request.setAttribute("filtroFechaInicio", filtroFInicio);
+                            request.setAttribute("filtroFechaFin", filtroFFin);
+
+                        } else {
+                            listaResultados = modeloAtraso.listarAtrasosPorCurso(idCurso);
+                        }
+
+            request.setAttribute("aRAtrasos", listaResultados);
+            request.setAttribute("idCurso", idCurso);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("aRAtrasos", new ArrayList<>());
+        }
+    }
             }
             //Agregar Atraso
             if (action.equalsIgnoreCase("agregarAtrasos")) {

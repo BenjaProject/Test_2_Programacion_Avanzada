@@ -139,5 +139,57 @@ public class AtrasoDAO implements iCrud<Atraso, AtrasoDTO> {
         return stmt.executeUpdate();
 
     }
+    
+    public ArrayList<AtrasoDTO> filtrarAtrasos(int idCurso, int idAlumno, String fechaInicio, String fechaFin) throws Exception {
+        ArrayList<AtrasoDTO> list = new ArrayList<>();
+        conn = FactoriaServiciosImpl.getFactoria().getConexionDB().getConexion();
 
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT at.id_atraso, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, ");
+        sql.append("at.fecha, at.hora, at.razon ");
+        sql.append("FROM Atraso at ");
+        sql.append("INNER JOIN Alumno al ON at.id_alumno = al.id ");
+        sql.append("INNER JOIN Persona p ON al.rut = p.rut ");
+        sql.append("WHERE al.id_curso = ? ");
+
+        if (idAlumno > 0) {
+            sql.append("AND at.id_alumno = ? ");
+        }
+        if (fechaInicio != null && !fechaInicio.isEmpty()) {
+            sql.append("AND at.fecha >= ? ");
+        }
+        if (fechaFin != null && !fechaFin.isEmpty()) {
+            sql.append("AND at.fecha <= ? ");
+        }
+
+        sql.append("ORDER BY at.fecha DESC");
+
+        stmt = conn.prepareStatement(sql.toString());
+
+        int index = 1;
+        stmt.setInt(index++, idCurso);
+
+        if (idAlumno > 0) {
+            stmt.setInt(index++, idAlumno);
+        }
+        if (fechaInicio != null && !fechaInicio.isEmpty()) {
+            stmt.setString(index++, fechaInicio);
+        }
+        if (fechaFin != null && !fechaFin.isEmpty()) {
+            stmt.setString(index++, fechaFin);
+        }
+
+        rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            AtrasoDTO dto = new AtrasoDTO();
+            dto.setIdAtraso(rs.getInt("id_atraso"));
+            dto.setNombreAlumno(rs.getString("nombre_completo"));
+            dto.setFecha(rs.getDate("fecha").toLocalDate());
+            dto.setHora(rs.getTime("hora").toLocalTime());
+            dto.setRazon(rs.getString("razon"));
+            list.add(dto);
+        }
+        return list;
+    }
 }
