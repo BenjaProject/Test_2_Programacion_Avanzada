@@ -69,14 +69,12 @@
                             <option value="0">-- Todos los Estudiantes --</option>
                             <%
                                 ArrayList alumnosCombo = (ArrayList) request.getAttribute("listaAlumnosCombo");
-                                // Recuperamos la selección anterior para mantenerla marcada
                                 Integer filtroIdAlumObj = (Integer) request.getAttribute("filtroIdAlumno");
                                 int filtroIdAlum = (filtroIdAlumObj != null) ? filtroIdAlumObj : 0;
 
                                 if (alumnosCombo != null) {
                                     for (Object obj : alumnosCombo) {
                                         AlumnoDTO al = (AlumnoDTO) obj;
-                                        // Revisamos si este alumno estaba seleccionado
                                         String selected = (al.getId() == filtroIdAlum) ? "selected" : "";
                             %>
                                     <option value="<%= al.getId() %>" <%= selected %>>
