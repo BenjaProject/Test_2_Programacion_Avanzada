@@ -7,6 +7,7 @@ package modelo;
 import dao.AtrasoDAO;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,7 +88,7 @@ public class Atraso {
         AtrasoDAO a = new AtrasoDAO();
         return a.read();
     }
-    public List listarAtrasosPorCurso(int idCurso) throws Exception{
+    public ArrayList listarAtrasosPorCurso(int idCurso) throws Exception{
         AtrasoDAO a = new AtrasoDAO();
         return a.readPorCurso(idCurso);
     }
@@ -108,4 +109,8 @@ public class Atraso {
         return a.delete(this.getIdAtraso());
     }
     
+    public ArrayList<dto.AtrasoDTO> filtrarAtrasos(int idCurso, int idAlumno, String fechaInicio, String fechaFin) throws Exception {
+        dao.AtrasoDAO dao = new dao.AtrasoDAO();
+        return dao.filtrarAtrasos(idCurso, idAlumno, fechaInicio, fechaFin);
+    }
 }

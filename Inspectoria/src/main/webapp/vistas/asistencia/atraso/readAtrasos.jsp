@@ -4,6 +4,7 @@
     Author     : Benjamín
 --%>
 
+<%@page import="dto.AlumnoDTO"%>
 <%@page import="dto.AtrasoDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -55,7 +56,51 @@
                     }
                 %>
             </script>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-light">Filtros de Búsqueda</div>
+                <div class="card-body">
+                    <form action="ControladorAtrasos" method="GET" class="form-inline justify-content-center">
+                        <input type="hidden" name="accion" value="listarAtrasos">
+                        <input type="hidden" name="idCurso" value="<%= idCurso %>">
 
+                        <label class="mr-2">Estudiante:</label>
+                        <select name="filtroIdAlumno" class="form-control mr-4">
+                            <option value="0">-- Todos los Estudiantes --</option>
+                            <%
+                                ArrayList alumnosCombo = (ArrayList) request.getAttribute("listaAlumnosCombo");
+                                // Recuperamos la selección anterior para mantenerla marcada
+                                Integer filtroIdAlumObj = (Integer) request.getAttribute("filtroIdAlumno");
+                                int filtroIdAlum = (filtroIdAlumObj != null) ? filtroIdAlumObj : 0;
+
+                                if (alumnosCombo != null) {
+                                    for (Object obj : alumnosCombo) {
+                                        AlumnoDTO al = (AlumnoDTO) obj;
+                                        // Revisamos si este alumno estaba seleccionado
+                                        String selected = (al.getId() == filtroIdAlum) ? "selected" : "";
+                            %>
+                                    <option value="<%= al.getId() %>" <%= selected %>>
+                                        <%= al.getNombreAlumno() + " " + al.getApellidoPAlumno() %>
+                                    </option>
+                            <%
+                                    }
+                                }
+                            %>
+                        </select>
+
+                        <label class="mr-2">Desde:</label>
+                        <input type="date" name="filtroFechaInicio" class="form-control mr-3" 
+                               value="<%= (request.getAttribute("filtroFechaInicio") != null) ? request.getAttribute("filtroFechaInicio") : "" %>">
+
+                        <label class="mr-2">Hasta:</label>
+                        <input type="date" name="filtroFechaFin" class="form-control mr-3"
+                               value="<%= (request.getAttribute("filtroFechaFin") != null) ? request.getAttribute("filtroFechaFin") : "" %>">
+
+                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                        <a href="ControladorAtrasos?accion=listarAtrasos&idCurso=<%= idCurso %>" class="btn btn-outline-secondary ml-2">Limpiar</a>
+                    </form>
+                </div>
+            </div>
             <table class="table table-bordered table-hover">
                 <thead class="thead-dark">
                     <tr>
