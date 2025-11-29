@@ -48,8 +48,8 @@ Ejemplo:
 -Inspector inicia sesión
 -Selecciona Curso 2B 
 -Alumno Juan Pérez 
--Menú inasistencias
--“Agregar inasistencia” 
+-Menú atraso
+-“Agregar Atraso” 
 -Ingresa fecha y motivo 
 -Guardar.
  
