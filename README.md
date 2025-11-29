@@ -26,7 +26,8 @@ Uso:
 3. Importar el script SQL incluido en /db para crear la base de datos.
 4. Ajustar credenciales de conexión en el archivo correspondiente del DAO.
 5. Ejecutar el proyecto con el botón "Run".
-6. Ingresar credenciales en login 
+6. Ingresar credenciales en login.
+7.  Usuario: Leo Contraseña: 1234
 
 Estructura:
 /src/java
