@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modelo.Alumno;
 import modelo.Inasistencia;
 
 /**
@@ -25,6 +26,7 @@ public class ControladorInasistencia extends HttpServlet {
     private final String urlActualizarInasistencia = "vistas/asistencia/inasistencias/updateInasistencias.jsp";
     
     private Inasistencia modeloInasistencia = new Inasistencia();
+    private Alumno modeloAlumno = new Alumno();
     int id;
     
     
@@ -73,7 +75,7 @@ public class ControladorInasistencia extends HttpServlet {
         String url="";
         String action = request.getParameter("accion");
         try {
-            if (action.equalsIgnoreCase("listarInasistencias")) {
+          if (action.equalsIgnoreCase("listarInasistencias")) {
                 url = urlListarInasistencias;
                 String idStr = request.getParameter("idCurso");
 
@@ -81,13 +83,40 @@ public class ControladorInasistencia extends HttpServlet {
                     try {
                         int idCurso = Integer.parseInt(idStr);
 
-                        ArrayList listaAtrasos = (ArrayList) modeloInasistencia.listarInasistenciasPorCurso(idCurso);
+                        ArrayList listaAlumnos = (ArrayList) modeloAlumno.listarAlumnosPorCurso(idCurso);
+                        request.setAttribute("listaAlumnosCombo", listaAlumnos);
 
-                        request.setAttribute("aRInasistencias", listaAtrasos);
+                        
+                        String filtroAlumnoStr = request.getParameter("filtroIdAlumno");
+                        String filtroFInicio = request.getParameter("filtroFechaInicio");
+                        String filtroFFin = request.getParameter("filtroFechaFin");
+
+                        ArrayList listaResultados;
+
+                        
+                        if (filtroAlumnoStr != null || filtroFInicio != null || filtroFFin != null) {
+                            
+                            int idAlum = (filtroAlumnoStr != null && !filtroAlumnoStr.isEmpty()) ? Integer.parseInt(filtroAlumnoStr) : 0;
+                            
+                            
+                            listaResultados = (ArrayList) modeloInasistencia.filtrarInasistencias(idCurso, idAlum, filtroFInicio, filtroFFin);
+
+                            
+                            request.setAttribute("filtroIdAlumno", idAlum);
+                            request.setAttribute("filtroFechaInicio", filtroFInicio);
+                            request.setAttribute("filtroFechaFin", filtroFFin);
+
+                        } else {
+                            
+                            listaResultados = (ArrayList) modeloInasistencia.listarInasistenciasPorCurso(idCurso);
+                        }
+
+                        request.setAttribute("aRInasistencias", listaResultados);
                         request.setAttribute("idCurso", idCurso);
 
                     } catch (Exception e) {
                         System.out.println("Error: " + e.getMessage());
+                        e.printStackTrace();
                         request.setAttribute("aRInasistencias", new ArrayList<>());
                     }
                 } else {
@@ -140,13 +169,31 @@ public class ControladorInasistencia extends HttpServlet {
                 
                
                 if (result == 1) {
-                    request.getSession().setAttribute("alertaMensaje", "Atraso modificado correctamente.");
+                    request.getSession().setAttribute("alertaMensaje", "Inasistencia modificado correctamente.");
                 } else {
-                    request.getSession().setAttribute("alertaMensaje", "Error: No se pudo modificar el atraso.");
+                    request.getSession().setAttribute("alertaMensaje", "Error: No se pudo modificar la inasistencia.");
                 }
                
                 response.sendRedirect("ControladorInasistencia?accion=listarInasistencias&idCurso=" + idCursoStr);
                 return;
+            }
+            
+            if(action.equalsIgnoreCase("eliminarInasistencia")){
+                id = Integer.parseInt(request.getParameter("idInasistencia"));
+                String idCurso = request.getParameter("idCurso");
+                modeloInasistencia.setIdInasistencia(id);
+                
+                int result = modeloInasistencia.eliminarInasistencia();
+                if(result==1){
+                    request.getSession().setAttribute("alertaMensaje", "Inasistencia eliminada correctamente");
+                }
+                else{
+                    request.getSession().setAttribute("alertaMensaje", "Error al eliminar inasistencia");
+                    
+                }
+                response.sendRedirect("ControladorInasistencia?accion=listarInasistencias&idCurso=" + idCurso);
+                return;
+                    
             }
             
         } catch (Exception e) {

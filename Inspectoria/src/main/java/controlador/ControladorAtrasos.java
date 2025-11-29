@@ -183,6 +183,21 @@ public class ControladorAtrasos extends HttpServlet {
                 response.sendRedirect("ControladorAtrasos?accion=listarAtrasos&idCurso=" + idCursoStr);
                 return;
             }
+            if(action.equalsIgnoreCase("eliminarAtraso")){
+                id=Integer.parseInt(request.getParameter("idAtraso"));
+                String idCursoStr = request.getParameter("idCurso");
+                modeloAtraso.setIdAtraso(id);
+                int result = modeloAtraso.eliminarAtraso();
+                if(result==1){
+                    request.getSession().setAttribute("alertaMensaje", "Atraso eliminado correctamente");
+                }
+                else{
+                    request.getSession().setAttribute("alertaMensaje", "Error al eliminar atraso");
+                }
+                response.sendRedirect("ControladorAtrasos?accion=listarAtrasos&idCurso=" + idCursoStr);
+                return;
+                
+            }
         } catch (Exception e) {
 
         }

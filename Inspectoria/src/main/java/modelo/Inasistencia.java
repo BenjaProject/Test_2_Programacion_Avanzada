@@ -79,6 +79,11 @@ public class Inasistencia {
         return i.read(id);
     }
     
+    public List filtrarInasistencias(int idCurso, int idAlumno, String fechaInicio, String fechaFin) throws Exception {
+    InasistenciaDAO dao = new InasistenciaDAO();
+    return dao.filtrar(idCurso, idAlumno, fechaInicio, fechaFin);
+    }
+    
     public int crearInasistencia() throws InstantiationException, IllegalAccessException, Exception{
         InasistenciaDAO i = new InasistenciaDAO();
         return i.create(this);
