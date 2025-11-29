@@ -25,6 +25,18 @@
     <body>
         <div class="container">
             <h1 class="mt-4 mb-4">Registro de Asistencia</h1>
+            <%
+                
+                Integer idCursoSeguro = (Integer) request.getAttribute("idCurso");
+                
+                if (idCursoSeguro == null && request.getParameter("idCurso") != null && !request.getParameter("idCurso").equals("null")) {
+                    try {
+                        idCursoSeguro = Integer.parseInt(request.getParameter("idCurso"));
+                    } catch (Exception e) {
+                    }
+                }
+                String idCursoStr = (idCursoSeguro != null) ? idCursoSeguro.toString() : "";
+            %>
             <!-- Botonera superior para navegación rápida -->
             <div class="mb-4 text-center">
                 <button class="btn btn-info" type="button" onclick="location.href = 'ControladorAsistencia?accion=ListarCurso'">Elegir Curso</button>
@@ -40,7 +52,7 @@
                 </button>
 
                 <button class="btn btn-success" type="button" 
-                        onclick="location.href = 'ControladorAsistencia?accion=add&idCurso=<%= request.getParameter("idCurso")%>'">
+                        onclick="location.href = 'ControladorAsistencia?accion=add&idCurso=<%= idCursoStr%>'">
                     Agregar Estudiante
                 </button>
                 <button class="btn btn-secondary" type="button" onclick="location.href = 'ControladorAsistencia?accion=menu'">Volver al Menú</button>
@@ -89,7 +101,7 @@
                         <tr>
                             <td class="text-center"><%= a.getId()%></td>
                             <td class="text-center"><%= a.getRut()%></td> 
-                            <td><%= a.getNombreAlumno() + " " + a.getApellidoPAlumno()
+                                <td><%= a.getNombreAlumno() + " " + a.getApellidoPAlumno()
                                         + " " + a.getApellidoMAlumno()%></td>
 
                             <td class="text-center radio-group">

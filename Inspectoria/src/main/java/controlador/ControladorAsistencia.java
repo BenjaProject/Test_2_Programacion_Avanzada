@@ -125,7 +125,7 @@ public class ControladorAsistencia extends HttpServlet {
 
                     ArrayList listaFiltrada = (ArrayList) modeloAlumno.listarAlumnosPorCurso(idCurso);
                     request.setAttribute("aREstudiantes", listaFiltrada);
-                    
+
                     request.setAttribute("idCurso", idCurso);
                 } else {
 
@@ -141,11 +141,9 @@ public class ControladorAsistencia extends HttpServlet {
                 String idCursoStr = request.getParameter("idCurso");
                 int idCurso = (idCursoStr != null) ? Integer.parseInt(idCursoStr) : 0;
 
-                
                 request.setAttribute("idCursoPreseleccionado", idCurso);
 
-                
-                String nombreCursoMostrar = ""; 
+                String nombreCursoMostrar = "";
 
                 if (idCurso > 0) {
                     Curso cursoEncontrado = modeloCurso.obtenerCursoPorId(idCurso);
@@ -176,15 +174,13 @@ public class ControladorAsistencia extends HttpServlet {
                 modeloAlumno.setCantidadAtrasos(cantAtr);
                 int result = modeloAlumno.agregarAlumno();
 
-                if (result==1) {
+                if (result == 1) {
                     request.getSession().setAttribute("alertaMensaje", "Se agrego alumno correctamente.");
                 } else {
                     request.getSession().setAttribute("alertaMensaje", "Error al agregar alumno.");
                 }
-                url = urlListarEstudiante;
-                ArrayList aREstudiantes = (ArrayList) modeloAlumno.listarAlumnos();
-                request.setAttribute("aREstudiantes", aREstudiantes);
-
+                response.sendRedirect("ControladorAsistencia?accion=listarEst&idCurso=" + idCurso);
+                return;
             }
 
         } catch (Exception e) {
@@ -242,8 +238,9 @@ public class ControladorAsistencia extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("alertaMensaje", "Error: " + e.getMessage());
+            System.out.println("ERROR FATAL: " + e.getMessage()); 
+            e.printStackTrace(); 
+            request.setAttribute("alertaMensaje", "Ocurrió un error: " + e.getMessage());
         }
 
         RequestDispatcher vista = request.getRequestDispatcher(url);
