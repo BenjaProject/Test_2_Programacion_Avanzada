@@ -131,6 +131,11 @@
                                class="btn btn-warning btn-sm">
                                 Editar
                             </a>
+                            <a href="ControladorAtrasos?accion=eliminarAtraso&idAtraso=<%= at.getIdAtraso()%>&idCurso=<%= idCurso%>"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Confirmas la eliminación de esta inasistencia?')">
+                            Eliminar
+                            </a>   
                         </td>
                     </tr>
                     <%

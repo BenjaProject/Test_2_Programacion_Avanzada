@@ -82,7 +82,7 @@ public class InasistenciaDAO implements iCrud<Inasistencia, InasistenciaDTO>{
             InasistenciaDTO dto = new InasistenciaDTO();
             dto.setIdInasistencia(rs.getInt("id_inasistencia"));
             
-            // Ahora recuperamos el nombre completo concatenado
+            
             dto.setNombreAlumno(rs.getString("nombre_completo"));
             
             dto.setFecha(rs.getDate("fecha").toLocalDate());
@@ -93,6 +93,41 @@ public class InasistenciaDAO implements iCrud<Inasistencia, InasistenciaDTO>{
         }
         return list;
     }
+    public ArrayList<InasistenciaDTO> filtrar(int idCurso, int idAlumno, String fechaInicio, String fechaFin) throws Exception {
+    ArrayList<InasistenciaDTO> list = new ArrayList<>();
+    String sql = "SELECT i.id_inasistencia, "
+               + "CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, "
+               + "i.fecha, i.justificada "
+               + "FROM Inasistencia i "
+               + "INNER JOIN Alumno al ON i.id_alumno = al.id "
+               + "INNER JOIN Persona p ON al.rut = p.rut "
+               + "WHERE al.id_curso = " + idCurso;
+
+    
+    if (idAlumno > 0) {
+        sql += " AND i.id_alumno = " + idAlumno;
+    }
+
+   
+    if (fechaInicio != null && !fechaInicio.isEmpty() && fechaFin != null && !fechaFin.isEmpty()) {
+        sql += " AND i.fecha BETWEEN '" + fechaInicio + "' AND '" + fechaFin + "'";
+    }
+    sql += " ORDER BY i.fecha DESC";
+
+    conn = FactoriaServiciosImpl.getFactoria().getConexionDB().getConexion();
+    stmt = conn.prepareStatement(sql);
+    rs = stmt.executeQuery();
+
+    while (rs.next()) {
+        InasistenciaDTO dto = new InasistenciaDTO();
+        dto.setIdInasistencia(rs.getInt("id_inasistencia"));
+        dto.setNombreAlumno(rs.getString("nombre_completo"));
+        dto.setFecha(rs.getDate("fecha").toLocalDate());
+        dto.setJustificada(rs.getBoolean("justificada"));
+        list.add(dto);
+    }
+    return list;
+}
 
     @Override
     public int create(Inasistencia t) throws ClassNotFoundException, InstantiationException, IllegalAccessException, Exception {
@@ -114,7 +149,7 @@ public class InasistenciaDAO implements iCrud<Inasistencia, InasistenciaDTO>{
     @Override
     public int delete(int id) throws ClassNotFoundException, InstantiationException, IllegalAccessException, Exception {
         conn = FactoriaServiciosImpl.getFactoria().getConexionDB().getConexion();
-        String sql  = "delete from Inasistencia where id="+id;
+        String sql  = "delete from Inasistencia where id_inasistencia="+id;
         stmt = conn.prepareStatement(sql);
         return stmt.executeUpdate();
     }
