@@ -4,7 +4,8 @@ Sistema de manejo de inasistencias y atrasos
 
 Este módulo para la inspectoría se centra en el editar, añadir, eliminar inasistencias y atrasos mientras también permite observar las susodichas para revisión.
 Características Principales:
-- Añadir atraso o inasistencia
+- Añadir atraso
+- Funcion para pasar la lista de asistencia
 - Editar atraso o inasistencia
 -Eliminar atraso o inasistencia
 - Revisar historial de atrasos e inasistencias
@@ -25,6 +26,7 @@ Uso:
 3. Importar el script SQL incluido en /db para crear la base de datos.
 4. Ajustar credenciales de conexión en el archivo correspondiente del DAO.
 5. Ejecutar el proyecto con el botón "Run".
+6. Ingresar credenciales en login 
 
 Estructura:
 /src/java
