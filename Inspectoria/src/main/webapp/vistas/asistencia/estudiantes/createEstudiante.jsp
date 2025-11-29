@@ -37,7 +37,7 @@
                 <form action="ControladorAsistencia">
                     Rut:
                     <br>
-                    <input class="form-control" type="text" name="txtRut">
+                    <input type="number" name="txtRut" class="form-control" max="999999999">
                     <br>
                     Nombre:
                     <br>
